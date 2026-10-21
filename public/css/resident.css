@@ -1,0 +1,136 @@
+/* ============================================================
+   Resident portal
+   - Laptop / monitor (768px and up): fills the whole screen.
+   - Phone (below 768px): a single portrait column with a
+     bottom tab bar. It stays a portrait column even if the
+     phone is turned sideways.
+   ============================================================ */
+
+.r-body { background: var(--barangay-bg); }
+
+.r-shell { min-height: 100vh; width: 100%; }
+
+/* ---------- sidebar (desktop) ---------- */
+.r-sidebar {
+    position: fixed; top: 0; bottom: 0; left: 0;
+    width: 250px;
+    background: linear-gradient(180deg, var(--barangay-navy), var(--barangay-dark));
+    color: #fff;
+    overflow-y: auto;
+    z-index: 1050;
+}
+.r-sidebar .brand { padding: 20px 18px; }
+.r-nav { padding: 14px 12px; }
+.r-nav .menu-item .badge { margin-left: auto; }
+
+/* ---------- main column ---------- */
+.r-main { margin-left: 250px; min-height: 100vh; }
+
+.r-topbar {
+    position: sticky; top: 0; z-index: 1020;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    background: #fff;
+    border-bottom: 1px solid var(--barangay-border);
+}
+.r-topbar h6 { font-weight: 700; }
+
+.r-content { padding: 28px 32px 40px; }   /* no max-width: use the whole screen */
+
+/* ---------- layout helpers ---------- */
+.r-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.r-grid  { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.r-grid-even { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+
+/* ---------- list rows (requests, certificates, documents) ---------- */
+.r-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--barangay-border);
+}
+.r-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.r-item:first-child { padding-top: 0; }
+.r-item .r-title { font-weight: 600; }
+.r-item .r-meta  { color: #7b8593; font-size: 12.5px; }
+.r-item .r-side  { text-align: right; flex-shrink: 0; }
+
+.r-ready-note {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: #e5f8ef; color: #16724d;
+    border: 1px solid #bfe9d3; border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 12px;
+}
+.r-ready-note i { font-size: 22px; line-height: 1; }
+
+.r-type-card {
+    border: 1px solid var(--barangay-border); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 10px; background: #fafcff;
+}
+
+.r-dl dt { color: #7b8593; font-weight: 500; font-size: 12.5px; }
+.r-dl dd { margin-bottom: 12px; font-weight: 600; }
+
+/* ---------- bottom bar (phones only) ---------- */
+.r-bottomnav { display: none; }
+.r-backdrop  { display: none; }
+.r-menu-btn  { display: none; }
+
+/* ============================================================
+   PHONE — portrait column
+   ============================================================ */
+@media (max-width: 767.98px) {
+
+    .r-body { background: #dde3ec; }
+
+    .r-shell {
+        max-width: 480px;             /* stays a portrait column, even sideways */
+        margin: 0 auto;
+        min-height: 100vh;
+        background: var(--barangay-bg);
+        position: relative;
+        padding-bottom: 72px;         /* room for the bottom bar */
+        box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 0 30px rgba(15,42,82,.12);
+    }
+
+    /* sidebar becomes a slide-in drawer */
+    .r-sidebar { width: 270px; transform: translateX(-100%); transition: transform .25s; }
+    .r-sidebar.show { transform: translateX(0); }
+    .r-backdrop.show { display: block; position: fixed; inset: 0; background: rgba(9,27,54,.45); z-index: 1040; }
+
+    .r-main { margin-left: 0; }
+    .r-topbar { padding: 0 14px; height: 58px; }
+    .r-menu-btn { display: inline-flex; }
+    .r-content { padding: 16px 14px 24px; }
+
+    .r-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .r-stats .stat-card { padding: 12px; }
+    .r-grid, .r-grid-even { grid-template-columns: 1fr; gap: 14px; }
+
+    .r-item { flex-wrap: wrap; }
+    .r-item .r-side { text-align: left; }
+
+    .r-bottomnav {
+        display: flex;
+        position: fixed; bottom: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 100%; max-width: 480px;
+        background: #fff;
+        border-top: 1px solid var(--barangay-border);
+        z-index: 1030;
+    }
+    .r-bottomnav a, .r-bottomnav button {
+        flex: 1; border: 0; background: none;
+        padding: 8px 2px 7px;
+        display: flex; flex-direction: column; align-items: center; gap: 2px;
+        font-size: 10.5px; color: #6b7686; text-decoration: none; position: relative;
+    }
+    .r-bottomnav i { font-size: 20px; line-height: 1.1; }
+    .r-bottomnav .active { color: var(--barangay-navy); font-weight: 700; }
+    .r-bottomnav .dot {
+        position: absolute; top: 5px; left: calc(50% + 6px);
+        min-width: 16px; height: 16px; border-radius: 8px;
+        background: #e3a824; color: #091b36; font-size: 10px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+    }
+}
